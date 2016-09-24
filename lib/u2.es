@@ -45,7 +45,7 @@ export default class U2 {
 
     const timestamp = new Date(mat2[2])
     const torrent = {
-      id: matches[1],
+      id: parseInt(matches[1]),
       title: matches[2],
       pubDate: timestamp,
     }
