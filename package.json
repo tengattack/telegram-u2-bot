@@ -1,0 +1,29 @@
+{
+  "name": "telegram-bot-u2",
+  "version": "1.0.0",
+  "description": "A telegram bot which can connect to u2 (u2.dmhy.org) and notify updates.",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint --ext .es,.js . || exit 0"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "u2",
+    "dmhy"
+  ],
+  "author": "tengattack",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.14.0",
+    "request": "^2.75.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "babel-preset-es2015-node6": "^0.3.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "eslint": "^3.6.0",
+    "eslint-plugin-import": "^1.16.0"
+  }
+}
