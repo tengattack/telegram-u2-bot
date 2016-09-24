@@ -4,6 +4,7 @@ import request from 'request'
 
 const TG_BOT_URL = 'https://api.telegram.org/bot'
 const DEF_LONG_POLLING_TIMEOUT = 30 // 30s
+const emptyFn = () => {}
 
 class BotApiCommands extends EventEmitter {}
 
@@ -84,7 +85,7 @@ export default class BotApi {
         this.events.emit('begin', updates.length)
 
         // it should be an array
-        updates.forEach(function (upd) {
+        updates.forEach(upd => {
           if (upd.update_id) {
             // Identifier of the first update to be returned.
             // Must be greater by one than the highest among the identifiers
@@ -160,21 +161,21 @@ export default class BotApi {
         params.disable_web_page_preview = true
       }
     }
-    this.post('sendMessage', params, cb ? cb : () => {})
+    this.post('sendMessage', params, cb || emptyFn)
   }
   sendPhoto(params, cb) {
-    this.post('sendPhoto', null, { formData: params }, cb ? cb : () => {})
+    this.post('sendPhoto', null, { formData: params }, cb || emptyFn)
   }
   answerCallbackQuery(params, cb) {
-    this.post('answerCallbackQuery', params, cb ? cb : () => {})
+    this.post('answerCallbackQuery', params, cb || emptyFn)
   }
   editMessageText(params, cb) {
-    this.post('editMessageText', params, cb ? cb : () => {})
+    this.post('editMessageText', params, cb || emptyFn)
   }
   editMessageReplyMarkup(params, cb) {
-    this.post('editMessageReplyMarkup', params, cb ? cb : () => {})
+    this.post('editMessageReplyMarkup', params, cb || emptyFn)
   }
   getChatAdministrators(params, cb) {
-    this.post('getChatAdministrators', params, cb ? cb :() => {})
+    this.post('getChatAdministrators', params, cb || emptyFn)
   }
 }
