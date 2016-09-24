@@ -41,7 +41,7 @@ function notifyUpdates(torrents) {
 function startCheckTorrentsUpdates() {
   setInterval(() => {
     u2.getTorrentList().then(torrents => {
-      const newTorrents = torrents.filter(t => torrentIds.includes(t.id))
+      const newTorrents = torrents.filter(t => !torrentIds.includes(t.id))
       if (newTorrents.length > 0) {
         // notify all
         notifyUpdates(newTorrents)
