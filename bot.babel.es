@@ -1,7 +1,5 @@
 #!/usr/bin/env babel-node
 
-import request from 'request'
-
 import BotApi from './lib/botapi'
 import U2 from './lib/u2'
 

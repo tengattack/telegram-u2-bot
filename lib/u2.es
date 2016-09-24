@@ -3,6 +3,8 @@ import request from 'request'
 
 const U2_URL = 'https://u2.dmhy.org'
 
+// https://github.com/tengattack/my-u2-rss/blob/master/index.php
+
 export default class U2 {
   constructor(cookie) {
     this.cookie = cookie
@@ -115,9 +117,9 @@ export default class U2 {
     return torrent
   }
   async getTorrentList() {
-    const html = await this.httpGet('/torrents.php');
+    const html = await this.httpGet('/torrents.php')
     if (!html) {
-      return [];
+      return []
     }
     const torrents = []
     const mat = html.match(/<tr>([\s\S]*?<\/table>.*?)<\/tr>/g)
