@@ -18,7 +18,7 @@ let torrentIds = []
 function getMetaInfo(t) {
   let meta = ''
   if (t.sticky) {
-    meta += '[置顶] '
+    meta += '<b>[置顶]</b> '
   }
   if (t.promotion) {
     const { up, down } = t.promotion
@@ -35,7 +35,7 @@ function getMetaInfo(t) {
       }
     }
     if (mp) {
-      meta += `[${mp}] `
+      meta += `<b>[${mp}]</b> `
     }
   }
   return meta
