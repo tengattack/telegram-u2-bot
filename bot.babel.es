@@ -22,7 +22,6 @@ function getMetaInfo(t) {
   }
   if (t.promotion) {
     const { up, down } = t.promotion
-    meta += '['
     let mp = ''
     if (up && up !== 1) {
       mp += `${up}x`
