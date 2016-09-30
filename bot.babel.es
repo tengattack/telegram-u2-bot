@@ -23,10 +23,10 @@ function getMetaInfo(t) {
   if (t.promotion) {
     const { up, down } = t.promotion
     let mp = ''
-    if (up && up !== 1) {
+    if (typeof up !== 'undefined' && up !== 1) {
       mp += `${up}x`
     }
-    if (down && down !== 1) {
+    if (typeof down !== 'undefined' && down !== 1) {
       if (mp) mp += '|'
       if (down <= 0) {
         mp += 'free'
