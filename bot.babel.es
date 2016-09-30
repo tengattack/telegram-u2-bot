@@ -15,9 +15,33 @@ const u2 = new U2(config.accessCookie)
 const bot = new BotApi(config.botToken)
 
 let torrentIds = []
+function getMetaInfo(torrent) {
+  let meta = ''
+  if (t.sticky) {
+    meta += '[置顶] '
+  }
+  if (t.promotion) {
+    const { up, down } = t.promotion
+    if (up || down) {
+      meta += '['
+      if (up) {
+        meta += `${up}up`
+      }
+      if (up && down) {
+        meta += '|'
+      }
+      if (down) {
+        meta += `${down}down`
+      }
+      meta += '] '
+    }
+  }
+  return meta
+}
 function torrentsMessageHTML(torrents) {
   const torrentLines = torrents.map((t, i) => {
-    return `${i + 1}. ${t.sticky ? '[置顶] ' : ''}`
+    const meta = getMetaInfo(t)
+    return `${i + 1}. ${meta}`
          + '<a href="https://u2.dmhy.org/details.php?id=' + t.id + '">'
          +   t.title
          + '</a>'
