@@ -15,25 +15,28 @@ const u2 = new U2(config.accessCookie)
 const bot = new BotApi(config.botToken)
 
 let torrentIds = []
-function getMetaInfo(torrent) {
+function getMetaInfo(t) {
   let meta = ''
   if (t.sticky) {
     meta += '[置顶] '
   }
   if (t.promotion) {
     const { up, down } = t.promotion
-    if (up || down) {
-      meta += '['
-      if (up) {
-        meta += `${up}up`
+    meta += '['
+    let mp = ''
+    if (up && up !== 1) {
+      mp += `${up}x`
+    }
+    if (down && down !== 1) {
+      if (mp) mp += '|'
+      if (down <= 0) {
+        mp += 'free'
+      } else {
+        mp += `${down}`
       }
-      if (up && down) {
-        meta += '|'
-      }
-      if (down) {
-        meta += `${down}down`
-      }
-      meta += '] '
+    }
+    if (mp) {
+      meta += `[${mp}] `
     }
   }
   return meta
