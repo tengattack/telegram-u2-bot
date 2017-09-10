@@ -88,7 +88,11 @@ function startCheckTorrentsUpdates() {
       const newTorrents = torrents.filter(t => !torrentIds.includes(t.id))
       if (newTorrents.length > 0) {
         // notify all
-        notifyUpdates('torrent', newTorrents)
+        if (torrentIds && torrentIds.length > 0) {
+          // after we have history data we start notify
+          // or we just store the new torrent's id list
+          notifyUpdates('torrent', newTorrents)
+        }
         // update
         torrentIds = [ ...torrents.map(t => t.id), ...torrentIds ]
                       .filter(onlyUnique)
