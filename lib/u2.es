@@ -123,6 +123,9 @@ export default class U2 {
     }
     const torrents = []
     const mat = html.match(/<tr>([\s\S]*?<\/table>.*?)<\/tr>/g)
+    if (!mat) {
+      return []
+    }
 
     for (const torrenthtml of mat) {
       const t = this.getTorrentInfo(torrenthtml)
@@ -132,5 +135,18 @@ export default class U2 {
     }
 
     return torrents
+  }
+  async getInvitePrice() {
+    const html = await this.httpGet('/invite.php')
+    if (!html) {
+      return null
+    }
+
+    const mat = html.match(/<span class="ucoin-notation" title="([\d,\.]+)">/)
+    if (!mat) {
+      return null
+    }
+
+    return mat[1]
   }
 }

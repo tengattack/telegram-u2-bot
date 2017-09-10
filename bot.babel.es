@@ -15,6 +15,7 @@ const u2 = new U2(config.accessCookie)
 const bot = new BotApi(config.botToken)
 
 let torrentIds = []
+let invitePrice = null
 function getMetaInfo(t) {
   let meta = ''
   if (t.sticky) {
@@ -50,9 +51,23 @@ function torrentsMessageHTML(torrents) {
   })
   return torrentLines.join('\n')
 }
-function notifyUpdates(torrents) {
-  const html = '新的种子：\n'
-             + torrentsMessageHTML(torrents)
+function notifyUpdates(type, data, oldData) {
+  let html
+  switch (type) {
+  case 'torrent':
+    html = '新的种子：\n'
+        + torrentsMessageHTML(data)
+    break
+  case 'invite_price':
+    html = '新的邀请价格: '
+    if (oldData) {
+      html += `<b>${oldData}</b> -> `
+    }
+    html += `<b>${data}</b> UCoin`
+    break
+  default:
+    return
+  }
   allowChatIds.forEach(chat_id => {
     bot.sendMessage({
       chat_id,
@@ -70,9 +85,19 @@ function startCheckTorrentsUpdates() {
       const newTorrents = torrents.filter(t => !torrentIds.includes(t.id))
       if (newTorrents.length > 0) {
         // notify all
-        notifyUpdates(newTorrents)
+        notifyUpdates('torrent', newTorrents)
         // update
         torrentIds = torrents.map(t => t.id)
+      }
+    })
+    u2.getInvitePrice().then(price => {
+      if (price !== invitePrice) {
+        // notify all
+        if (price) {
+          notifyUpdates('invite_price', price, invitePrice)
+        }
+        // update
+        invitePrice = price
       }
     })
   }, config.checkInterval)
@@ -98,6 +123,21 @@ bot.commands.on('list', (upd, followString) => {
   const chat = upd.message.chat
   u2.getTorrentList().then(torrents => {
     const html = torrentsMessageHTML(torrents.slice(0, 10))
+    bot.sendMessage({
+      chat_id: chat.id,
+      text: html,
+    }, err => {
+      if (err) {
+        console.log(err)
+      }
+    })
+  })
+})
+
+bot.commands.on('invite_price', (upd, followString) => {
+  const chat = upd.message.chat
+  u2.getInvitePrice().then(price => {
+    const html = `当前邀请价格: <b>${price}</b> UCoin`
     bot.sendMessage({
       chat_id: chat.id,
       text: html,
