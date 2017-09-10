@@ -41,6 +41,9 @@ function getMetaInfo(t) {
   }
   return meta
 }
+function onlyUnique(value, index, self) { 
+  return self.indexOf(value) === index
+}
 function torrentsMessageHTML(torrents) {
   const torrentLines = torrents.map((t, i) => {
     const meta = getMetaInfo(t)
@@ -87,13 +90,17 @@ function startCheckTorrentsUpdates() {
         // notify all
         notifyUpdates('torrent', newTorrents)
         // update
-        torrentIds = torrents.map(t => t.id)
+        torrentIds = [ ...torrents.map(t => t.id), ...torrentIds ]
+                      .filter(onlyUnique)
+                      .slice(0, 100)
       }
     })
     u2.getInvitePrice().then(price => {
       if (price !== invitePrice) {
         // notify all
-        if (price) {
+        if (price && invitePrice) {
+          // after we have history price we start notify
+          // or we just store the new price
           notifyUpdates('invite_price', price, invitePrice)
         }
         // update
