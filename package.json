@@ -1,6 +1,6 @@
 {
-  "name": "telegram-bot-u2",
-  "version": "1.0.0",
+  "name": "telegram-u2-bot",
+  "version": "1.1.0",
   "description": "A telegram bot which can connect to u2 (u2.dmhy.org) and notify updates.",
   "main": "bot.js",
   "scripts": {
@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-core": "^6.14.0",
+    "mongodb": "^2.2.4",
     "request": "^2.75.0"
   },
   "devDependencies": {

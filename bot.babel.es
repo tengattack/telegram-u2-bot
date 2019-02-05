@@ -2,10 +2,12 @@
 
 import BotApi from './lib/botapi'
 import U2 from './lib/u2'
+import DB from './lib/db'
 
 import config from './config'
 
 const { allowChatIds } = config
+const db = {}
 
 process.on('uncaughtException', err => {
   console.error('Error caught in uncaughtException event:', err)
@@ -41,7 +43,7 @@ function getMetaInfo(t) {
   }
   return meta
 }
-function onlyUnique(value, index, self) { 
+function onlyUnique(value, index, self) {
   return self.indexOf(value) === index
 }
 function torrentsMessageHTML(torrents) {
@@ -109,15 +111,16 @@ function startCheckTorrentsUpdates() {
         }
         // update
         invitePrice = price
+        db.invite_price.save({ price, create_time: new Date() }, (err) => {
+          if (err) {
+            console.error('save price error:', err)
+          }
+        })
       }
     })
   }, config.checkInterval)
 }
-u2.getTorrentList().then(torrents => {
-  // init first torrent ids
-  torrentIds = torrents.map(t => t.id)
-  startCheckTorrentsUpdates()
-})
+
 
 bot.setCheck((cmd, upd) => {
   if (upd.message && upd.message.chat) {
@@ -160,4 +163,21 @@ bot.commands.on('invite_price', (upd, followString) => {
   })
 })
 
-bot.start()
+DB.create(config.db, (err, _db) => {
+  if (err) {
+    console.error('Failed to connect database.', err)
+    return
+  }
+
+  db.invite_price = _db.collection('invite_price')
+
+  db.invite_price.ensureIndex({ create_time: -1 }, { background: true })
+
+  // start service
+  bot.start()
+  u2.getTorrentList().then(torrents => {
+    // init first torrent ids
+    torrentIds = torrents.map(t => t.id)
+    startCheckTorrentsUpdates()
+  })
+})
